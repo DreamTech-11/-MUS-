@@ -1,0 +1,178 @@
+name: dream_tech_flutter
+description: "A new Flutter project."
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+# In Windows, build-name is used as the major, minor, and patch parts
+# of the product and file versions while build-number is used as the build suffix.
+version: 2.0.0+2
+
+environment:
+  sdk: ^3.5.0
+
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
+dependencies:
+  flutter:
+    sdk: flutter
+  intl: ^0.19.0
+  gif: ^2.2.0
+  get: ^4.6.6
+  share_plus: ^10.0.2
+  http: ^1.2.2
+  table_calendar: ^3.1.2
+  screenshot: ^3.0.0
+  lottie: ^3.1.2
+  flutter_local_notifications: ^17.2.3
+  firebase_auth: ^5.3.1
+  firebase_core: ^3.6.0
+  firebase_storage: ^12.3.4
+  cupertino_icons: ^1.0.8
+  flutter_launcher_icons: ^0.14.1
+  flutter_native_splash: ^2.4.2
+  url_launcher: ^6.3.1
+  path: ^1.9.0
+  image: ^4.3.0
+  flutter_dotenv: ^5.2.1
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/images/splash_screen_image_with_background.png"
+  adaptive_icon_background: "#FFA7C7E7"
+  adaptive_icon_foreground: "assets/images/splash_screen_image_with_background.png"
+  ios_background_color: "#FFA7C7E7"
+
+flutter_native_splash:
+  color: "#6B7FD7"
+  image: assets/images/splash_screen_image.png
+  color_dark: "#6B7FD7"
+  image_dark: assets/images/splash_screen_image.png
+
+  android_12:
+    color: "#6B7FD7"
+    image: assets/images/splash_screen_image.png
+    icon_background_color: "#6B7FD7"
+    image_dark: assets/images/splash_screen_image.png
+    icon_background_color_dark: "#6B7FD7"
+
+  web: false  # Webプラットフォームのスプラッシュを無効化
+  ios: true  # iOSプラットフォームのスプラッシュを有効化
+  android: true  # Androidプラットフォームのスプラッシュを有効化
+
+  android_gravity: center  # center, fill, bottom, top
+  ios_content_mode: center  # center, scaleToFill, scaleAspectFit, scaleAspectFill
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # The "flutter_lints" package below contains a set of recommended lints to
+  # encourage good coding practices. The lint set provided by the package is
+  # activated in the `analysis_options.yaml` file located at the root of your
+  # package. See that file for information about deactivating specific lint
+  # rules and activating additional ones.
+  flutter_lints: ^4.0.0
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - .env
+    - assets/images/smile_image.png
+    - assets/images/smileDream_image.png
+    - assets/images/sleeping_time.png
+    - assets/images/sleep_quality.png
+    - assets/images/editing_icon.png
+    - assets/images/calender.png
+    - assets/images/setting.png
+    - assets/images/floating_action-button_icon.png
+    - assets/images/generation_Story.gif
+    - assets/images/lottie_sleeping_cat.json
+    - assets/images/sendMessage_icon.png
+    - assets/images/true.png
+    - assets/images/false.png
+    - assets/images/good.png
+    - assets/images/bad.png
+    - assets/images/premonition.png
+    - assets/images/warning.png
+    - assets/images/wishful.png
+    - assets/images/anxiety.png
+    - assets/images/home_icon.png
+    - assets/images/splash_screen_image.png
+    - assets/images/splash_screen_image_with_background.png
+    - assets/images/login_background_cloud_1.png
+    - assets/images/login_background_cloud_2.png
+    - assets/images/login_background_star.png
+    - assets/images/close_icon.png
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/to/resolution-aware-images
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/to/asset-from-package
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  fonts:
+    - family: NotoSansJP
+      fonts:
+        - asset: assets/fonts/NotoSansJP/NotoSansJP-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/NotoSansJP/NotoSansJP-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/NotoSansJP/NotoSansJP-Light.ttf
+          weight: 300
+        - asset: assets/fonts/NotoSansJP/NotoSansJP-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/NotoSansJP/NotoSansJP-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/NotoSansJP/NotoSansJP-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/NotoSansJP/NotoSansJP-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/NotoSansJP/NotoSansJP-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/NotoSansJP/NotoSansJP-Black.ttf
+          weight: 900
+
+    - family: Aclonica
+      fonts:
+        - asset: assets/fonts/Aclonica-Regular.ttf
+
+uses-material-design: true
+
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/to/font-from-package

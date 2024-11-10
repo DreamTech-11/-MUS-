@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1021090367447",
+    "project_id": "dreamtech-8138d",
+    "storage_bucket": "dreamtech-8138d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1021090367447:android:dc894a6100b3b721b0ed92",
+        "android_client_info": {
+          "package_name": "com.example.dream_tech_flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0LAlUvWwwVVliugHNWHuPWcYDn1BQpps"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1021090367447:android:707c5460d24c5c2fb0ed92",
+        "android_client_info": {
+          "package_name": "jp.dreamtech.flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0LAlUvWwwVVliugHNWHuPWcYDn1BQpps"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
