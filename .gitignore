@@ -44,3 +44,6 @@ app.*.map.json
 
 # Environment files
 .env
+
+# googleService
+GoogleService-Info.plist
