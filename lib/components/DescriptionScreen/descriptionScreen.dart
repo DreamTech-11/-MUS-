@@ -1,6 +1,7 @@
 import 'package:dream_tech_flutter/commonComponents/ColorConstraints.dart';
 import 'package:dream_tech_flutter/commonComponents/MapConstraints.dart';
 import 'package:dream_tech_flutter/components/DescriptionScreen/descriptioinViewModel.dart';
+import 'package:dream_tech_flutter/components/dialog/deleteDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -177,7 +178,14 @@ class ItemizationForm extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             IconButton(
-              onPressed: () => viewModel.removeFormContent(index),
+              onPressed: () {
+                // 現在のフォーカスを解除
+                FocusManager.instance.primaryFocus?.unfocus();
+                DeleteDialog.deleteDialog(
+                  context,
+                      () => viewModel.removeFormContent(index),
+                );
+              },
               icon: const Icon(Icons.delete),
               color: Colors.grey,
             ),

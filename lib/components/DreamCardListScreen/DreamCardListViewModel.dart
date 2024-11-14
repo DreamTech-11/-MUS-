@@ -13,33 +13,39 @@ class DreamCardListViewModel extends GetxController {
 
 
   Future<void> fetchDreams(int year, int month) async {
+    isLoading.value = true;
     try {
       final dreams = await apiService.getDreams(year, month);
+
       dreams.sort((a, b) {
         final dateA = DateTime.parse(a['created_at']);
         final dateB = DateTime.parse(b['created_at']);
         return dateA.compareTo(dateB);
       });
-      isLoading.value = true;
+
       dayList.assignAll(dreams);
-      await Future.delayed(Duration(milliseconds: 500));
     } catch (e) {
       print('Error fetching dreams: $e');
-    } finally {
-      isLoading.value = false;
     }
+
+    isLoading.value = false;
   }
 
-  Future<void> deleteDream(int id,String imageURL) async {
+  Future<void> deleteDream(int id, String imageURL) async {
     try {
       isLoading.value = true;
-      await apiService.deleteDream(id);
-      await storageService.deleteFile(imageURL);
+
+      await Future.wait([
+        apiService.deleteDream(id),
+        storageService.deleteFile(imageURL)
+      ]);
+
+      dayList.removeWhere((item) => item['id'] == id);
+
       await fetchDreams(currentDate.value.year, currentDate.value.month);
     } catch (e) {
       print('Error deleting dream: $e');
-    } finally {
-      isLoading.value = false;
+      await fetchDreams(currentDate.value.year, currentDate.value.month);
     }
   }
 
