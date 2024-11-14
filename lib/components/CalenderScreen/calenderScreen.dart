@@ -7,9 +7,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../../commonComponents/ColorConstraints.dart';
-import '../../commonComponents/FontFamily.dart';
-import '../../commonComponents/ImageFile.dart';
-import '../../commonComponents/TextConstraints.dart';
 import 'calenderViewModel.dart';
 
 
@@ -176,6 +173,11 @@ class CalenderWidgetState extends State<CalenderWidget> {
       locale: "ja_JP",
       headerVisible: false,
       daysOfWeekVisible: true,
+      daysOfWeekStyle: const DaysOfWeekStyle(
+        // 曜日テキストの下部に余白を追加
+        weekdayStyle: TextStyle(height: 1),
+        weekendStyle: TextStyle(height: 1),
+      ),
       onDaySelected: (selectedDay, focusedDay) {
         setState(() {
           _focusedDay = focusedDay;
@@ -207,7 +209,7 @@ class CalenderWidgetState extends State<CalenderWidget> {
           );
         },
       ),
-      rowHeight: 60,
+      rowHeight: 65,
     );
   }
 

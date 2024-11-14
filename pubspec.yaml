@@ -60,17 +60,17 @@ flutter_launcher_icons:
   ios_background_color: "#FFA7C7E7"
 
 flutter_native_splash:
-  color: "#6B7FD7"
+  color: "#9999FF"
   image: assets/images/splash_screen_image.png
-  color_dark: "#6B7FD7"
+  color_dark: "#9999FF"
   image_dark: assets/images/splash_screen_image.png
 
   android_12:
-    color: "#6B7FD7"
+    color: "#9999FF"
     image: assets/images/splash_screen_image.png
-    icon_background_color: "#6B7FD7"
+    icon_background_color: "#9999FF"
     image_dark: assets/images/splash_screen_image.png
-    icon_background_color_dark: "#6B7FD7"
+    icon_background_color_dark: "#9999FF"
 
   web: false  # Webプラットフォームのスプラッシュを無効化
   ios: true  # iOSプラットフォームのスプラッシュを有効化

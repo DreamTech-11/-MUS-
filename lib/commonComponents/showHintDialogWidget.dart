@@ -167,46 +167,53 @@ class _HintDialogWidgetState extends State<HintDialogWidget> {
 
   Widget _dialogTitleAndCloseButton(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 11,left: 14,right: 14),
+      padding: const EdgeInsets.only(top: 11, left: 14, right: 14),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
             TextConstraints.dreamIntroductionDialogTitle,
             style: TextStyle(
-                fontSize: 14,
+                fontSize: 20,
                 fontFamily: FontFamily.NotoSansJP,
-                fontWeight: FontWeight.w600
+                fontWeight: FontWeight.w900
             ),
           ),
-          SizedBox(
+          Material(
+            color: Colors.transparent,
             child: InkWell(
+              customBorder: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
               onTap: () {
                 Navigator.of(context).pop();
               },
-              child: Row(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(bottom: 2),
-                    child: Text(
-                      TextConstraints.closeText,
-                      style: TextStyle(
-                          fontSize: 10,
-                          fontFamily: FontFamily.NotoSansJP,
-                          fontWeight: FontWeight.w600,
-                          color: ColorConstraints.closeButtonColor
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                child: Row(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(bottom: 2),
+                      child: Text(
+                        TextConstraints.closeText,
+                        style: TextStyle(
+                            fontSize: 10,
+                            fontFamily: FontFamily.NotoSansJP,
+                            fontWeight: FontWeight.w600,
+                            color: ColorConstraints.closeButtonColor
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 5),
-                  Image.asset(
-                    ImageFile.closeIcon,
-                    width: 14,
-                    height: 14,
-                    color: ColorConstraints.closeButtonColor,
-                  ),
-                ],
+                    const SizedBox(width: 5),
+                    Image.asset(
+                      ImageFile.closeIcon,
+                      width: 14,
+                      height: 14,
+                      color: ColorConstraints.closeButtonColor,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

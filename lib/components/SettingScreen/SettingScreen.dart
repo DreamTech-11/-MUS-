@@ -1,6 +1,5 @@
 import 'package:dream_tech_flutter/commonComponents/TextConstraints.dart';
 import 'package:dream_tech_flutter/components/SettingScreen/SettingViewModel.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../commonComponents/FontFamily.dart';
