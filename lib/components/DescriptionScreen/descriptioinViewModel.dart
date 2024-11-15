@@ -88,6 +88,7 @@ class DescriptionViewModel extends GetxController {
         setWakeTime(picked);
       }
     }
+    FocusManager.instance.primaryFocus?.unfocus();
   }
 
   void checkItem(BuildContext context,DescriptionViewModel viewModel)  {

@@ -20,6 +20,7 @@ class DeleteDialog {
             ),
             onPressed: () {
               Navigator.pop(context);
+              FocusManager.instance.primaryFocus?.unfocus();
             },
           ),
           CupertinoDialogAction(
@@ -27,6 +28,7 @@ class DeleteDialog {
             onPressed: () {
               onDelete();
               Navigator.pop(context);
+              FocusManager.instance.primaryFocus?.unfocus();
             },
             child: const Text(
               TextConstraints.confirm,

@@ -21,18 +21,21 @@ class DescriptionScreen extends StatelessWidget {
     return Scaffold(
       appBar: descriptionAppbar(),
       body: GestureDetector(
-        onTap:() {
+        onTap: () {
           FocusScope.of(context).unfocus();
         },
-        child: ListView(
-          children: [
-            titleScreen(viewModel: viewModel),
-            dreamContent(viewModel: viewModel),
-            dreamType(viewModel: viewModel,context: context),
-            SleepTime(viewModel: viewModel),
-            dreamQuality(viewModel: viewModel),
-            createButton(context: context,viewModel: viewModel),
-          ],
+        child: ColoredBox(
+          color: Colors.white,
+          child: ListView(
+            children: [
+              titleScreen(viewModel: viewModel),
+              dreamContent(viewModel: viewModel),
+              dreamType(viewModel: viewModel, context: context),
+              SleepTime(viewModel: viewModel),
+              dreamQuality(viewModel: viewModel),
+              createButton(context: context, viewModel: viewModel),
+            ],
+          ),
         ),
       ),
     );
@@ -179,8 +182,6 @@ class ItemizationForm extends StatelessWidget {
           children: [
             IconButton(
               onPressed: () {
-                // 現在のフォーカスを解除
-                FocusManager.instance.primaryFocus?.unfocus();
                 DeleteDialog.deleteDialog(
                   context,
                       () => viewModel.removeFormContent(index),
@@ -410,9 +411,7 @@ class SleepTime extends StatelessWidget {
                 ),
               ),
             ),
-
             const SizedBox(height: 10),
-
             Align(
               alignment: Alignment.topLeft,
               child: Container(
@@ -429,7 +428,6 @@ class SleepTime extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     timeSelector(context,true),
-
                     const Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 14),
                       child: Align(
@@ -445,9 +443,7 @@ class SleepTime extends StatelessWidget {
                       )
 
                     ),
-
                     timeSelector(context,false)
-
                   ],
                 )
               ),
