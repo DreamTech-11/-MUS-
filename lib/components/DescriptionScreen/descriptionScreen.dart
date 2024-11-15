@@ -1,6 +1,7 @@
 import 'package:dream_tech_flutter/commonComponents/ColorConstraints.dart';
 import 'package:dream_tech_flutter/commonComponents/MapConstraints.dart';
 import 'package:dream_tech_flutter/components/DescriptionScreen/descriptioinViewModel.dart';
+import 'package:dream_tech_flutter/components/dialog/deleteDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -20,18 +21,21 @@ class DescriptionScreen extends StatelessWidget {
     return Scaffold(
       appBar: descriptionAppbar(),
       body: GestureDetector(
-        onTap:() {
+        onTap: () {
           FocusScope.of(context).unfocus();
         },
-        child: ListView(
-          children: [
-            titleScreen(viewModel: viewModel),
-            dreamContent(viewModel: viewModel),
-            dreamType(viewModel: viewModel,context: context),
-            SleepTime(viewModel: viewModel),
-            dreamQuality(viewModel: viewModel),
-            createButton(context: context,viewModel: viewModel),
-          ],
+        child: ColoredBox(
+          color: Colors.white,
+          child: ListView(
+            children: [
+              titleScreen(viewModel: viewModel),
+              dreamContent(viewModel: viewModel),
+              dreamType(viewModel: viewModel, context: context),
+              SleepTime(viewModel: viewModel),
+              dreamQuality(viewModel: viewModel),
+              createButton(context: context, viewModel: viewModel),
+            ],
+          ),
         ),
       ),
     );
@@ -177,7 +181,12 @@ class ItemizationForm extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             IconButton(
-              onPressed: () => viewModel.removeFormContent(index),
+              onPressed: () {
+                DeleteDialog.deleteDialog(
+                  context,
+                      () => viewModel.removeFormContent(index),
+                );
+              },
               icon: const Icon(Icons.delete),
               color: Colors.grey,
             ),
@@ -402,9 +411,7 @@ class SleepTime extends StatelessWidget {
                 ),
               ),
             ),
-
             const SizedBox(height: 10),
-
             Align(
               alignment: Alignment.topLeft,
               child: Container(
@@ -421,7 +428,6 @@ class SleepTime extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     timeSelector(context,true),
-
                     const Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 14),
                       child: Align(
@@ -437,9 +443,7 @@ class SleepTime extends StatelessWidget {
                       )
 
                     ),
-
                     timeSelector(context,false)
-
                   ],
                 )
               ),

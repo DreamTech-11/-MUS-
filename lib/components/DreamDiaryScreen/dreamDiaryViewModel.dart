@@ -11,7 +11,6 @@ class DreamDiaryViewModel extends GetxController {
   final APIService apiService = APIService.instance;
   CommonService commonService = CommonService();
   NavigationService navigationService = NavigationService();
-
   DreamDiaryViewModel(DreamModel dreamModel) : dreamModel = dreamModel.obs;
 
   void saveData(BuildContext context) {
