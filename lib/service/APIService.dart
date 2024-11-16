@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -46,18 +47,41 @@ class APIService extends GetxService {
     }
   }
 
-  Future<Map<String,String>> gptQuery(String title, String content) async {
+  Future<Map<String,String>> gptQuery(
+      String title,
+      String content,
+      void Function(double) onProgress
+      ) async {
     final url = Uri.parse('$baseUrl/gpt-query/');
     final headers = await getHeaders();
+
+    onProgress(0.4);
+
+    final result = await compute(_processGptQuery, {
+      'url': url.toString(),
+      'headers': headers,
+      'title': title,
+      'content': content,
+    }
+    );
+
+    onProgress(0.6);
+    return result;
+  }
+
+  static Future<Map<String,String>> _processGptQuery(
+      Map<String, dynamic> params,
+      ) async {
     try {
       final response = await http.post(
-        url,
-        headers: headers,
+        Uri.parse(params['url']),
+        headers: params['headers'],
         body: json.encode({
-          'title': title,
-          'content': content,
+          'title': params['title'],
+          'content': params['content'],
         }),
       );
+
       if (response.statusCode == 200) {
         final responseData = json.decode(utf8.decode(response.bodyBytes));
         final gptResponse = responseData['gpt_response'];
@@ -66,7 +90,7 @@ class APIService extends GetxService {
         print('GPT Response: ${responseData['image_url']}');
         return {
           'content': gptResponse,
-          'image_url':imageURl
+          'image_url': imageURl
         };
       } else {
         print('Error: ${response.statusCode}');

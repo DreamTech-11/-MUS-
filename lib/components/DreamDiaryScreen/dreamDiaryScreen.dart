@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dream_tech_flutter/commonComponents/MapConstraints.dart';
 import 'package:dream_tech_flutter/commonComponents/TextConstraints.dart';
 import 'package:dream_tech_flutter/components/DreamDiaryScreen/dreamDiaryViewModel.dart';
@@ -269,7 +270,6 @@ Widget titleAndImage({
   required Function(String) updateDreamContent,
   required BuildContext context
 }) {
-  print(imagePath);
   void showEditBottomSheet() {
     final TextEditingController textController = TextEditingController(text: dreamContext);
     showModalBottomSheet(
@@ -367,96 +367,188 @@ Widget titleAndImage({
       padding: const EdgeInsets.symmetric(horizontal: 24,vertical: 10),
       child: Column(
         children: [
-          Align(
-            alignment: Alignment.topLeft,
-            child: Text(
-              title,
-              style: const TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 25,
-                  fontFamily: FontFamily.NotoSansJP
+          _buildDreamTitle(title),
+          const SizedBox(height: 13),
+          _buildDreamImage(imagePath,context),
+          const SizedBox(height: 20),
+          _buildDreamContent(showEditBottomSheet,dreamContext)
+        ],
+      ),
+    ),
+  );
+}
+
+Widget _buildDreamTitle(String dreamTitle) {
+  return Align(
+    alignment: Alignment.topLeft,
+    child: Text(
+      dreamTitle,
+      style: const TextStyle(
+          fontWeight: FontWeight.w800,
+          fontSize: 25,
+          fontFamily: FontFamily.NotoSansJP
+      ),
+    ),
+  );
+}
+
+Widget _buildDreamImage(String imagePath, context) {
+  precacheImage(NetworkImage(imagePath), context);
+
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 4),
+    child: AspectRatio(
+      aspectRatio: 1,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: CachedNetworkImage(
+          imageUrl: imagePath,
+          fit: BoxFit.cover,
+          placeholder: (context, url) => Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: Colors.grey[300],
+            ),
+            child: ShimmerLoading(
+              child: Container(
+                width: double.infinity,
+                height: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
-          const SizedBox(height: 4),
-          Divider(height: 2, color: Colors.grey[350]),
-          const SizedBox(height: 13),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: AspectRatio(
-              aspectRatio: 1,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.network(
-                  imagePath,
-                  fit: BoxFit.cover,
-                  loadingBuilder: (
-                      BuildContext context,
-                      Widget child,
-                      ImageChunkEvent? loadingProgress
-                      ){
-                    if(loadingProgress == null){
-                      return child;
-                    }
-                    return Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.grey[400]
-                      ),
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded
-                              / loadingProgress.expectedTotalBytes!
-                              : null,
-                          color: Colors.white
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              )
+          imageBuilder: (context, imageProvider) => Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              image: DecorationImage(
+                image: imageProvider,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-          const SizedBox(height: 20),
-          Container(
-            decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(18)
-            ),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    IconButton(
-                        onPressed: showEditBottomSheet,
-                        icon: Image.asset(
-                          ImageFile.editingIcon,
-                          width: 20,
-                          height: 20,
-                          fit: BoxFit.cover,
-                        ),
-                      padding: EdgeInsets.zero,
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 14,left: 14,bottom: 15),
-                  child: Text(
-                    dreamContext,
-                    style: const TextStyle(
-                        fontFamily: FontFamily.NotoSansJP,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600
-                    ),
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
+        ),
       ),
+    ),
+  );
+}
+
+class ShimmerLoading extends StatefulWidget {
+  final Widget child;
+
+  const ShimmerLoading({
+    Key? key,
+    required this.child,
+  }) : super(key: key);
+
+  @override
+  State<ShimmerLoading> createState() => _ShimmerLoadingState();
+}
+
+class _ShimmerLoadingState extends State<ShimmerLoading>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController.unbounded(vsync: this)
+      ..repeat(min: -0.5, max: 1.5, period: const Duration(milliseconds: 1500));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return ShaderMask(
+          blendMode: BlendMode.srcATop,
+          shaderCallback: (bounds) {
+            return LinearGradient(
+              colors: const [
+                Color(0xFFE0E0E0),
+                Color(0xFFFFFFFF),
+                Color(0xFFE0E0E0),
+              ],
+              stops: const [0.0, 0.5, 0.9],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              transform: _SmoothGradientTransform(_controller.value),
+            ).createShader(bounds);
+          },
+          child: child,
+        );
+      },
+      child: widget.child,
+    );
+  }
+}
+
+class _SmoothGradientTransform extends GradientTransform {
+  const _SmoothGradientTransform(this.percent);
+
+  final double percent;
+
+  @override
+  Matrix4? transform(Rect bounds, {TextDirection? textDirection}) {
+    final smoothPercent = Curves.easeInOutSine.transform(
+        (percent + 0.5) / 2
+    );
+
+    return Matrix4.translationValues(
+      bounds.width * smoothPercent,
+      bounds.height * smoothPercent * 0.05,
+      0.0,
+    );
+  }
+}
+
+Widget _buildDreamContent(
+    VoidCallback showEditBottomSheet,
+    String dreamContext,
+    ) {
+  return Container(
+    decoration: BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(18)
+    ),
+    child: Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            IconButton(
+              onPressed: showEditBottomSheet,
+              icon: Image.asset(
+                ImageFile.editingIcon,
+                width: 20,
+                height: 20,
+                fit: BoxFit.cover,
+              ),
+              padding: EdgeInsets.zero,
+            ),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 14,left: 14,bottom: 15),
+          child: Text(
+            dreamContext,
+            style: const TextStyle(
+                fontFamily: FontFamily.NotoSansJP,
+                fontSize: 14,
+                fontWeight: FontWeight.w600
+            ),
+          ),
+        )
+      ],
     ),
   );
 }
