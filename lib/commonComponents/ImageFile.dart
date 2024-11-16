@@ -12,7 +12,7 @@ class ImageFile {
   static const String editingIcon = 'assets/images/editing_icon.png';
   static const String sleepTimeIcon = 'assets/images/sleeping_time.png';
   static const String sleepQuality = 'assets/images/sleep_quality.png';
-  static const String generateStory = 'assets/images/generation_Story.gif';
+  static const String generateStory = 'assets/images/lottie_generation_story.json';
   static const String createDiary = 'assets/images/floating_action-button_icon.png';
   static const String homeIcon = 'assets/images/home_icon.png';
   static const String calenderIcon = 'assets/images/calender.png';

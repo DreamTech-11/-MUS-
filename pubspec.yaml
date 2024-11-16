@@ -49,6 +49,7 @@ dependencies:
   path: ^1.9.0
   image: ^4.3.0
   flutter_dotenv: ^5.2.1
+  cached_network_image: ^3.4.1
 
 flutter_launcher_icons:
   android: true
@@ -117,6 +118,7 @@ flutter:
     - assets/images/floating_action-button_icon.png
     - assets/images/generation_Story.gif
     - assets/images/lottie_sleeping_cat.json
+    - assets/images/lottie_generation_story.json
     - assets/images/sendMessage_icon.png
     - assets/images/true.png
     - assets/images/false.png

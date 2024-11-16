@@ -1,11 +1,12 @@
 import 'package:dream_tech_flutter/commonComponents/FontFamily.dart';
 import 'package:dream_tech_flutter/commonComponents/ImageFile.dart';
 import 'package:dream_tech_flutter/commonComponents/MapConstraints.dart';
-import 'package:dream_tech_flutter/commonComponents/TextConstraints.dart';
 import 'package:dream_tech_flutter/components/DailyCardScreen/dailyCardViewModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../commonComponents/ColorConstraints.dart';
+import '../dialog/deleteDialog.dart';
 
 class DailyCard extends StatefulWidget {
   final String days;
@@ -32,7 +33,6 @@ class DailyCard extends StatefulWidget {
 }
 
 class DailyCardState extends State<DailyCard> {
-  late int _id;
   late String _days;
   late String _type;
   late String _quality;
@@ -45,7 +45,6 @@ class DailyCardState extends State<DailyCard> {
   @override
   void initState() {
     super.initState();
-    _id = widget.id;
     _days = widget.days;
     _type = widget.type;
     _quality = widget.quality;
@@ -83,7 +82,6 @@ class DailyCardState extends State<DailyCard> {
                           sleepTime: _sleepTime,
                           context: context,
                           dayItem: _dayItem,
-                          id: _id,
                           viewModel: viewModel,
                           mapConstraints: mapConstraints,
                           onDelete: _onDelete
@@ -130,7 +128,6 @@ Widget bottomDailyCard({
   required String sleepTime,
   required BuildContext context,
   required dynamic dayItem,
-  required int id,
   required DailyCardViewModel viewModel,
   required MapConstraints mapConstraints,
   required Function onDelete
@@ -154,7 +151,6 @@ Widget bottomDailyCard({
                       typeNameAndEditButtonRow(
                           type: type,
                           context: context,
-                          id: id,
                           onDelete: onDelete,
                           mapConstraints: mapConstraints
                       ),
@@ -190,7 +186,6 @@ Widget typeImageOnDailyCard({required String type,required MapConstraints mapCon
 Widget typeNameAndEditButtonRow({
   required String type,
   required BuildContext context,
-  required int id,
   required Function onDelete,
   required MapConstraints mapConstraints }) {
   return SizedBox(
@@ -200,7 +195,7 @@ Widget typeNameAndEditButtonRow({
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         typeName(type: type,mapConstraints: mapConstraints),
-        editButton(context: context,id: id,onDelete: onDelete),
+        editButton(context: context,onDelete: onDelete),
       ],
     ),
   );
@@ -222,16 +217,14 @@ Widget typeName({required String type,required MapConstraints mapConstraints}) {
   );
 }
 
-Widget editButton({required BuildContext context, required int id, required  Function onDelete}) {
+Widget editButton({required BuildContext context, required  Function onDelete}) {
   return Padding(
     padding: const EdgeInsets.only(top: 8.0),
     child: IconButton(
-      onPressed: () => deleteDialog(context,id,onDelete),
-      icon: Image.asset(
-        ImageFile.editingIcon,
-        width: 20,
-        height: 20,
-        fit: BoxFit.fill,
+      onPressed: () => DeleteDialog.deleteDialog(context,onDelete),
+      icon: const Icon(
+        Icons.delete_sharp,
+        size: 22,
       ),
       padding: EdgeInsets.zero,
     ),
@@ -328,41 +321,5 @@ Widget sleepQuality({required String quality}) {
         ),
       ),
     ],
-  );
-}
-
-void deleteDialog(BuildContext context, id,Function onDelete) {
-  showCupertinoDialog<void>(
-    context: context,
-    builder: (BuildContext context) => CupertinoAlertDialog(
-      title: const Text(TextConstraints.deleteTitle),
-      content: const Text(TextConstraints.deleteSubTitle),
-      actions: <CupertinoDialogAction>[
-        CupertinoDialogAction(
-          child: const Text(
-              TextConstraints.cancel,
-            style: TextStyle(
-              color: Colors.blue
-            ),
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        CupertinoDialogAction(
-          isDestructiveAction: true,
-          onPressed: () {
-            onDelete();
-            Navigator.pop(context);
-          },
-          child: const Text(
-              TextConstraints.confirm,
-            style: TextStyle(
-              color: Colors.red
-            ),
-          ),
-        ),
-      ],
-    ),
   );
 }

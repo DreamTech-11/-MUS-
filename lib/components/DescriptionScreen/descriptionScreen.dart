@@ -1,6 +1,7 @@
 import 'package:dream_tech_flutter/commonComponents/ColorConstraints.dart';
 import 'package:dream_tech_flutter/commonComponents/MapConstraints.dart';
 import 'package:dream_tech_flutter/components/DescriptionScreen/descriptioinViewModel.dart';
+import 'package:dream_tech_flutter/components/dialog/deleteDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -20,18 +21,21 @@ class DescriptionScreen extends StatelessWidget {
     return Scaffold(
       appBar: descriptionAppbar(),
       body: GestureDetector(
-        onTap:() {
+        onTap: () {
           FocusScope.of(context).unfocus();
         },
-        child: ListView(
-          children: [
-            titleScreen(viewModel: viewModel),
-            dreamContent(viewModel: viewModel),
-            dreamType(viewModel: viewModel,context: context),
-            SleepTime(viewModel: viewModel),
-            dreamQuality(viewModel: viewModel),
-            createButton(context: context,viewModel: viewModel),
-          ],
+        child: ColoredBox(
+          color: Colors.white,
+          child: ListView(
+            children: [
+              titleScreen(viewModel: viewModel),
+              dreamContent(viewModel: viewModel),
+              dreamType(viewModel: viewModel, context: context),
+              SleepTime(viewModel: viewModel),
+              dreamQuality(viewModel: viewModel),
+              createButton(context: context, viewModel: viewModel),
+            ],
+          ),
         ),
       ),
     );
@@ -173,39 +177,67 @@ class ItemizationForm extends StatelessWidget {
           borderRadius: BorderRadius.circular(12.0),
           side: BorderSide(color: Colors.black.withOpacity(0.6), width: 1),
         ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            IconButton(
-              onPressed: () => viewModel.removeFormContent(index),
-              icon: const Icon(Icons.delete),
-              color: Colors.grey,
-            ),
-            Expanded(
-              child: TextField(
-                  controller: viewModel.getController(index),
-                  onChanged: (value) {
-                    viewModel.updateFormContent(index, value);
-                    if (value.trim().isNotEmpty) {
-                      viewModel.addNewForm();
-                    }
-                  },
-                  maxLines: null,
-                  maxLength: maxCharacters,
-                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                  keyboardType: TextInputType.multiline,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    hintText: TextConstraints.hintTextOfDescriptionContent,
-                    contentPadding: EdgeInsets.only(top: 8, bottom: 8, right: 12),
-                  ),
-                  style: const TextStyle(
-                      fontSize: 16,
-                      fontFamily: FontFamily.NotoSansJP
-                  )
+        child: IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(width: 16),
+              Expanded(
+                child: TextField(
+                    controller: viewModel.getController(index),
+                    onChanged: (value) {
+                      viewModel.updateFormContent(index, value);
+                      if (value.trim().isNotEmpty) {
+                        viewModel.addNewForm();
+                      }
+                    },
+                    maxLines: null,
+                    maxLength: maxCharacters,
+                    maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                    keyboardType: TextInputType.multiline,
+                    decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: TextConstraints.hintTextOfDescriptionContent,
+                        contentPadding: EdgeInsets.only(top: 8, bottom: 8),
+                        counterText: ''
+                    ),
+                    style: const TextStyle(
+                        fontSize: 16,
+                        fontFamily: FontFamily.NotoSansJP
+                    )
+                ),
               ),
-            ),
-          ],
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      DeleteDialog.deleteDialog(
+                        context,
+                            () => viewModel.removeFormContent(index),
+                      );
+                    },
+                    icon: const Icon(Icons.delete),
+                    color: Colors.grey,
+                  ),
+                  Container(
+                    alignment: Alignment.bottomCenter,
+                    padding: const EdgeInsets.only(right: 16, bottom: 6),
+                    child: Text(
+                      '${viewModel.getController(index).text.length}/$maxCharacters',
+                      style: TextStyle(
+                          fontSize: 12,
+                          color: viewModel.getController(index).text.length >= maxCharacters
+                              ? Colors.red
+                              : Colors.grey,
+                          fontFamily: FontFamily.NotoSansJP
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -220,7 +252,6 @@ Widget dreamType({
 
   return Container(
     width: double.infinity,
-    height: 100,
     color: Colors.white,
     child: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -254,28 +285,32 @@ Widget dreamType({
               )
             ],
           ),
-          const SizedBox(height: 10),
-          SizedBox(
-            height: 34,
-            child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: mapConstraints.typeMap.length,
-                itemBuilder: (context,index){
-                  final key = mapConstraints.typeMap.keys.elementAt(index);
-                  final value = mapConstraints.typeMap[key]!;
-
-                  return Padding(
-                      padding: const EdgeInsets.only(right: 16.0),
-                      child: Obx(() => selectItem(
-                          typeColor: mapConstraints.typeLiteColorMap[key],
-                          item: value,
-                          isSelected: viewModel.dreamModel.value.type == key,
-                          onTap: () => viewModel.setType(key)
-                      )),
-                  );
-                }
-            ),
-          )
+          LayoutBuilder(
+            builder: (context, constraints) {
+              return Container(
+                width: constraints.maxWidth,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Wrap(
+                    spacing: 16,
+                    runSpacing: 10,
+                    alignment: WrapAlignment.start,
+                    children: mapConstraints.typeMap.entries.map((entry) {
+                      return SizedBox(
+                        child: Obx(() => selectItem(
+                            typeColor: mapConstraints.typeLiteColorMap[entry.key],
+                            item: entry.value,
+                            isSelected: viewModel.dreamModel.value.type == entry.key,
+                            onTap: () => viewModel.setType(entry.key)
+                        )),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: 10)
         ],
       ),
     ),
@@ -295,7 +330,7 @@ Widget selectItem({
       borderRadius: BorderRadius.circular(16),
       child: Ink(
         width: 60,
-        height: 20,
+        height: 34,
           decoration: BoxDecoration(
               color: isSelected
                   ? typeColor ?? Colors.lightBlue[300]
@@ -323,51 +358,52 @@ Widget selectItem({
   );
 }
 
-Widget dreamQuality({required DescriptionViewModel viewModel}) {
+Widget dreamQuality({ required DescriptionViewModel viewModel }) {
   final MapConstraints mapConstraints = MapConstraints();
 
   return Container(
     width: double.infinity,
-    height: 75,
     color: Colors.white,
     child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Align(
-            alignment: Alignment.topLeft,
-            child: Text(
-              TextConstraints.dreamQuality,
-              style: TextStyle(
-                  fontFamily: FontFamily.NotoSansJP,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                  color: Colors.black
-              ),
+          const SizedBox(height: 17),
+          const Text(
+            TextConstraints.dreamQuality,
+            style: TextStyle(
+                fontFamily: FontFamily.NotoSansJP,
+                fontWeight: FontWeight.w900,
+                fontSize: 14
             ),
           ),
-          const SizedBox(height: 10),
-          SizedBox(
-            height: 34,
-            child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: mapConstraints.qualityMap.length,
-                itemBuilder: (context,index){
-                  final key = mapConstraints.qualityMap.keys.elementAt(index);
-                  final value = mapConstraints.qualityMap[key]!;
-
-                  return Padding(
-                      padding: const EdgeInsets.only(right: 16.0),
-                      child: Obx(() => selectItem(
-                        typeColor: mapConstraints.qualityTypeColorMap[key],
-                        item: value,
-                        isSelected: viewModel.dreamModel.value.quality == key,
-                        onTap: () => viewModel.setQuality(key)
-                      )),
-                  );
-                }
-            ),
-          )
+          LayoutBuilder(
+            builder: (context, constraints) {
+              return Container(
+                width: constraints.maxWidth,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Wrap(
+                    spacing: 16,
+                    runSpacing: 10,
+                    alignment: WrapAlignment.start,
+                    children: mapConstraints.qualityMap.entries.map((entry) {
+                      return SizedBox(
+                        child: Obx(() => selectItem(
+                            typeColor: mapConstraints.qualityTypeColorMap[entry.key],
+                            item: entry.value,
+                            isSelected: viewModel.dreamModel.value.quality == entry.key,
+                            onTap: () => viewModel.setQuality(entry.key)
+                        )),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: 10)
         ],
       ),
     ),
@@ -384,7 +420,6 @@ class SleepTime extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 100,
       color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -402,9 +437,7 @@ class SleepTime extends StatelessWidget {
                 ),
               ),
             ),
-
             const SizedBox(height: 10),
-
             Align(
               alignment: Alignment.topLeft,
               child: Container(
@@ -421,7 +454,6 @@ class SleepTime extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     timeSelector(context,true),
-
                     const Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 14),
                       child: Align(
@@ -437,9 +469,7 @@ class SleepTime extends StatelessWidget {
                       )
 
                     ),
-
                     timeSelector(context,false)
-
                   ],
                 )
               ),

@@ -13,32 +13,54 @@ class LoadingViewModel extends GetxController {
   final storageService = StorageService();
   final APIService apiService = APIService.instance;
   final RxDouble progress = 0.0.obs;
-  Timer? _timer;
+  Timer? _progressTimer;
 
-  void _startFakeProgress() {
-    progress.value = 0.0;
-    _timer = Timer.periodic(Duration(milliseconds: 170), (timer) {
-      if (progress.value < 0.9) {
-        progress.value += 0.005;
-      } else {
+
+  void animateProgress(double from, double to) {
+    final duration = Duration(milliseconds: 4000);
+    final curve = Curves.easeInOut;
+    final steps = 300;
+
+    _progressTimer?.cancel();
+    _progressTimer = Timer.periodic(duration ~/ steps, (timer) {
+      final progress = timer.tick / steps;
+      if (progress >= 1.0) {
         timer.cancel();
+        this.progress.value = to;
+        return;
       }
+
+      final curvedProgress = curve.transform(progress);
+      this.progress.value = from + (to - from) * curvedProgress;
     });
   }
 
+
   Future<void> pushTitleAndContent(BuildContext context,DreamModel dreamModel) async {
     try{
-      _startFakeProgress();
-      final response = await apiService.gptQuery(dreamModel.title, dreamModel.content.join('\n'));
+      animateProgress(0.0, 0.1);
+
+      final response = await apiService.gptQuery(
+          dreamModel.title,
+          dreamModel.content.join('\n'),
+          (progress) {
+            animateProgress(this.progress.value, progress);
+          }
+      );
+
+      animateProgress(progress.value, 0.7);
+
       final String imageURL = await storageService.downloadAndUploadImage(response['image_url']!);
-      _timer?.cancel();
-      progress.value = 0.9;
+
+      animateProgress(progress.value, 0.9);
+
       dreamModel.gptTitle = dreamModel.title;
       dreamModel.gptContent = response['content']!;
       dreamModel.dreamImageURL = imageURL;
 
-      progress.value = 1.0;
-      await Future.delayed(Duration(milliseconds: 1000));
+      animateProgress(progress.value, 1.0);
+
+      await Future.delayed(Duration(milliseconds: 4000));
       navigationService.navigateToDreamDiaryNoStack(context, dreamModel);
     }catch (e) {
       print('Error creating dream post: $e');
@@ -47,7 +69,6 @@ class LoadingViewModel extends GetxController {
       );
       Navigator.pop(context);
     } finally {
-      _timer?.cancel();
       progress.value = 0.0;
     }
   }
