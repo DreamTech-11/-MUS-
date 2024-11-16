@@ -2,6 +2,7 @@ import 'package:dream_tech_flutter/commonComponents/ImageFile.dart';
 import 'package:dream_tech_flutter/components/LoadingScreen/LoadingViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import '../../commonComponents/FontFamily.dart';
 import '../../commonComponents/TextConstraints.dart';
 import '../../model/DreamModel.dart';
@@ -34,11 +35,12 @@ class LoadingScreenState extends State<LoadingScreen> with TickerProviderStateMi
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(
+              Lottie.asset(
                 ImageFile.generateStory,
                 width: 120,
                 height: 120,
                 fit: BoxFit.fill,
+                repeat: true, // アニメーションを繰り返す
               ),
               const SizedBox(height: 50),
               Obx(() => Padding(
