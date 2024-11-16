@@ -5,6 +5,7 @@ import 'package:dream_tech_flutter/components/DailyCardScreen/dailyCardViewModel
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../commonComponents/ColorConstraints.dart';
 import '../dialog/deleteDialog.dart';
 
 class DailyCard extends StatefulWidget {
@@ -221,11 +222,9 @@ Widget editButton({required BuildContext context, required  Function onDelete}) 
     padding: const EdgeInsets.only(top: 8.0),
     child: IconButton(
       onPressed: () => DeleteDialog.deleteDialog(context,onDelete),
-      icon: Image.asset(
-        ImageFile.editingIcon,
-        width: 20,
-        height: 20,
-        fit: BoxFit.fill,
+      icon: const Icon(
+        Icons.delete_sharp,
+        size: 22,
       ),
       padding: EdgeInsets.zero,
     ),
