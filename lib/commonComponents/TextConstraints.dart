@@ -121,11 +121,28 @@ class TextConstraints {
 
   //　エラーハンドリング
   static const String failedToAcquireData = 'データの読み込みに失敗しました';
-  static const String failedToInitializationModel = 'DreamModelの初期化に失敗しました';
+  static const String failedToInitializationModel =
+      'DreamModelの初期化に失敗しました';
   static const String failedDataType = 'データの型が正しくありません';
   static const String notExistData = 'データが存在しません';
-  static const String errorPostDream = '夢の投稿中にエラーが発生しました。もう一度お試しください。';
+  static const String errorPostDream = ''
+      '夢の投稿中にエラーが発生しました。もう一度お試しください。';
 
   //shareText
   static const String shareText = '夢日記アプリ「MUSŌ」で記録中';
+
+  //DeleteAccountConfirmDialogText
+  static const String deleteAccountConfirmDialogTitleText = 'アカウントの削除';
+  static const String deleteAccountConfirmDialogContentText =
+      'アカウントを削除するには、現在のメールアドレスを入力してください。';
+  static const String deleteAccountConfirmDialogCautionText =
+      '※この操作はログアウトではありません';
+  static const String deleteAccountConfirmDialogCurrentMail =
+      '現在のメールアドレス : ';
+  static const String deleteAccountConfirmDialogRequestMail =
+      'メールアドレスを入力';
+  static const String deleteAccountConfirmDialogErrorText =
+      'メールアドレスが一致しません';
+  static const String deleteAccountConfirmDialogDeleteText = '削除';
+  static const String deleteAccountConfirmDialogCancelText = 'キャンセル';
 }

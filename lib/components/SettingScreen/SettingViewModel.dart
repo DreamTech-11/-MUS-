@@ -18,13 +18,19 @@ class SettingViewModel extends GetxController {
 
   Future<void> signOut(BuildContext context) async {
     try{
-      debugPrint('SettingViewModel Attempting to sign out...');
       await auth.signOut();
-      debugPrint('SettingViewModel Sign out successful');
-
       _navigationService.navigateToLogin(context);
     } catch (e) {
-      debugPrint('SettingViewModel Error during sign out: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> deleteAccount(BuildContext context) async {
+    try{
+      await auth.currentUser?.delete();
+      _navigationService.navigateToLogin(context);
+    } catch (e) {
+      debugPrint('SettingViewModel Error during deleteAccount: $e');
       rethrow;
     }
   }

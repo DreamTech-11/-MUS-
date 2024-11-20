@@ -19,7 +19,7 @@ class LoadingViewModel extends GetxController {
   void animateProgress(double from, double to) {
     final duration = Duration(milliseconds: 4000);
     final curve = Curves.easeInOut;
-    final steps = 300;
+    final steps = 600;
 
     _progressTimer?.cancel();
     _progressTimer = Timer.periodic(duration ~/ steps, (timer) {

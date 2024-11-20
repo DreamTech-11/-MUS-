@@ -455,7 +455,7 @@ class _ShimmerLoadingState extends State<ShimmerLoading>
   void initState() {
     super.initState();
     _controller = AnimationController.unbounded(vsync: this)
-      ..repeat(min: -0.5, max: 1.5, period: const Duration(milliseconds: 1500));
+      ..repeat(min: -2.0, max: 1.5, period: const Duration(milliseconds: 2000));
   }
 
   @override
@@ -474,11 +474,13 @@ class _ShimmerLoadingState extends State<ShimmerLoading>
           shaderCallback: (bounds) {
             return LinearGradient(
               colors: const [
-                Color(0xFFE0E0E0),
-                Color(0xFFFFFFFF),
-                Color(0xFFE0E0E0),
+                Color(0xFFE0E0E0),    // グレー
+                Color(0xFFEAEAEA),    // より明るいグレー
+                Color(0xFFFFFFFF),    // 白
+                Color(0xFFEAEAEA),    // より明るいグレー
+                Color(0xFFE0E0E0),    // グレー
               ],
-              stops: const [0.0, 0.5, 0.9],
+              stops: const [-0.3, -0.2, 0.0, 0.2, 0.6],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               transform: _SmoothGradientTransform(_controller.value),
@@ -500,12 +502,12 @@ class _SmoothGradientTransform extends GradientTransform {
   @override
   Matrix4? transform(Rect bounds, {TextDirection? textDirection}) {
     final smoothPercent = Curves.easeInOutSine.transform(
-        (percent + 0.5) / 2
+        (percent + 2.0) / 3.5
     );
 
     return Matrix4.translationValues(
-      bounds.width * smoothPercent,
-      bounds.height * smoothPercent * 0.05,
+      bounds.width * (smoothPercent * 1.2),
+      bounds.height * smoothPercent * 0.8,
       0.0,
     );
   }
